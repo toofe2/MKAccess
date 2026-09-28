@@ -13,7 +13,7 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
-      - name: Build iOS arm64 dylib
+      - name: Build safe iOS arm64 dylib
         run: |
           set -euxo pipefail
           SDK="$(xcrun --sdk iphoneos --show-sdk-path)"
@@ -27,13 +27,10 @@ jobs:
             -install_name "@rpath/MKAccess.dylib" \
             MKAccess/MKAccess.m \
             -framework Foundation \
-            -framework UIKit \
-            -framework CoreGraphics \
-            -framework QuartzCore \
             -o build/MKAccess.dylib
           file build/MKAccess.dylib
           codesign -s - --force build/MKAccess.dylib
       - uses: actions/upload-artifact@v4
         with:
-          name: MKAccess-arm64
+          name: MKAccess-Safe-arm64
           path: build/MKAccess.dylib
